@@ -1,0 +1,483 @@
+cd C:\Bitnami\wampstack-8.0.7-0\mysql\bin
+.\mysql -uroot -p
+
+#User :
+DROP PROCEDURE IF EXISTS loopInsertUser;
+DELIMITER $$
+CREATE PROCEDURE loopInsertUser()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 5 DO
+Insert into User (user_id, nickname, profile_pic, user_email, user_phone, SNS_sync, SNS_register, marketing_aggree, user_pwd)
+VALUES(concat(i),concat('닉네임',i),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'),concat(i,'@naver.com'),concat('0101234567',i),concat('NVR'),concat('NVR'),concat(1),concat('1234',i));
+SET i = i + 1;
+END WHILE;
+
+END $$
+
+CALL loopInsertUser() $$
+
+_________________________________
+
+
+
+#Help : 카테고리 내맴대로 
+DROP PROCEDURE IF EXISTS loopInsert $$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 5 DO
+Insert into Help (help_id, title, category, description)
+VALUES(concat(i),concat('제목',i),concat('예약'),concat('설명',i));
+SET i = i + 1;
+END WHILE;
+
+END $$
+
+CALL loopInsert() $$
+
+
+_____________________________________________
+
+
+#Space: 태그, closed space id 처리, 
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 10 DO
+Insert into Space (space_id, space_name, space_description, space_intro, tag,pay_standard,space_image,work_start,work_end,facility_intro,location,notice,host_id,closed_space_id)
+VALUES(concat(i),concat('장소이름',i),concat('장소설명'),concat('한줄설명',i),concat('태그1','태그2','태그3'),concat('NOWPAY'),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'),concat(00),concat(24),concat('이런저런시설설명',i),concat('위치',i),concat('주의사항 어쩌구'),concat(now()%5+1),concat(now()%7+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from space $$
+
+______________________________________________
+
+
+#Host
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 3 DO
+Insert into Host (host_id, host_description,host_image)
+VALUES(concat(i),concat('호스트 설명',i),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from host $$
+
+_____________________________________________
+
+
+#Exhibition
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 3 DO
+Insert into Exhibition (exh_id, exh_name, exh_description,banner_image)
+VALUES(concat(i),concat('기획전 이름',i),concat('기획전 설명',i),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Exhibition $$
+
+
+________________________________________
+
+
+
+
+
+
+#Exhibition-Space
+
+
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 10 DO
+Insert into exhibitionSpace (exh_space_id, exh_id, space_id)
+VALUES(concat(i),concat((NOW()+i)%3+1),concat((NOW()+i)%10+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from exhibitionSpace $$
+
+__________________________________________
+
+
+
+#Category
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 20 DO
+Insert into Category (category_id, category_name)
+VALUES(concat(i),concat('이름',i));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Category $$
+
+
+______________________________________
+
+
+
+
+
+
+
+#Zzim
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 10 DO
+Insert into Zzim (space_id, user_id)
+VALUES(concat((NOW())%10+1),concat((NOW()+i)%5+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Zzim $$
+select distinct space_id,user_id from zzim; #아예 중복 삭제는 안되나.? 
+
+_____________________________________
+
+
+
+
+
+
+#categorySpace
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 40 DO
+Insert into categorySpace (category_space_id, category_id,space_id)
+VALUES(concat(i),concat((NOW())%20+1),concat((NOW()+i)%10+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from categorySpace $$
+select distinct category_id,space_id from categorySpace$$
+
+___________________________________________________________
+
+
+
+
+
+#Question
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 40 DO
+Insert into Question (question_id, content, date, user_id, space_id)
+VALUES(concat(i),concat('내용'),concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat((NOW()+i)%5+1),concat((rand())%10+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Question $$
+__________________________________________
+
+
+
+
+
+#Answer
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 40 DO
+Insert into Answer (answer_id, question_id, content, date, host_id)
+VALUES(concat(i),concat((rand()+i)%40+1),concat('내용'),concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat((NOW()+i)%3+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Answer $$
+
+__________________________________________
+
+
+
+
+#Review 
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 5 DO
+Insert into Review (review_id, content, date, rate, image, user_id, space_id)
+VALUES(concat(i),concat('.'),concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat(5),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'),concat((rand()+i)%5+1),concat((NOW()+i)%10+1));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from Review $$
+
+___________________________________________________
+
+#ClosedDay
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(1),concat('Mo'));
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(2),concat('Tu'));
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(3),concat('We'));
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(4),concat('Th'));
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(5),concat('Fr'));
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(6),concat('Sa'));
+Insert into ClosedDay (closedDay_id, closedDay)
+VALUES(concat(7),concat('Su'));
+END $$
+CALL loopInsert() $$
+
+select * from ClosedDay $$
+
+
+
+_________________________________________________________
+
+
+
+
+#closedDaySpace
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 7 DO
+Insert into closedDaySpace (closed_space_id,closedDay_id)
+VALUES(concat(i),concat((NOW()+i)%7+1));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from closedDaySpace $$
+
+
+
+_____________________________________________________
+
+
+
+#NOtice
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 5 DO
+Insert into Notice (notice_id, name, content)
+VALUES(concat(i),concat('제목',i),concat('내용',i));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Notice $$
+
+
+
+_______________________________________________________
+
+#Reservation
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 10 DO
+Insert into Reservation (reserv_no, ap_date, booker_name,date, requests,user_id)
+VALUES(concat(i),concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat('실명',i),concat('내용'),concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat((NOW()+i)%5+1));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from Reservation $$
+
+
+________________________________________________________
+
+#AllocatedCoupon
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 3 DO
+Insert into AllocatedCoupon (alloc_coupon_id, coupon_id, user_id,regi_date,dd_date,use_period,Field)
+VALUES(concat(i),concat(1), concat((NOW()+i)%5+1), concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")), concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")),concat('내용'));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from AllocatedCoupon $$
+
+
+___________________________________
+
+#Coupon
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+Insert into Coupon (coupon_id, coupon_name, effect, discount_rate,discount_amount,description, coupon_condition)
+VALUES(concat(1), concat('제목'), concat(True), concat(30), concat(0),concat('설명') ,concat('조건'));
+Insert into Coupon (coupon_id, coupon_name, effect, discount_rate, discount_amount,description,coupon_condition)
+VALUES(concat(2), concat('제목'), concat(False), concat(0), concat(5000), concat('설명'), concat('조건'));
+END $$
+CALL loopInsert() $$
+
+select * from Coupon $$
+
+
+
+__________________________________
+
+
+
+
+#DetailedSpace
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 20 DO
+Insert into DetailedSpace (detailed_id, detailedDescription, Price, accommodation, detailed_price_std, additional_reserv_option, space_id, reserv_no)
+VALUES(concat(i),concat('설명',i),concat(now()*rand()%20*10000), concat(rand()%5*2),concat(1), concat('추가 예약 기준'),concat((NOW()+i)%10+1), concat((NOW()+i)%10+1));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from DetailedSpace $$
+
+
+
+
+
+______________________________
+
+#Reply
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 20 DO
+Insert into Reply (reply_id, review_id, content,date)
+VALUES(concat(i),concat(rand()%20+1),concat('답변',i), concat(DATE_FORMAT(NOW(), "%Y %c/%e %r")));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from Reply $$
+____________________________
+
+
+
+
+#Refund:  테이블 자ㄹ못 만든듯 ㅋ  ㅋ primary 키 
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+DECLARE i INT DEFAULT 1;
+WHILE i <= 10 DO
+Insert into Refund (space_id, d_day,percent)
+VALUES(concat(2),concat(10-i),concat((10-(i-1))*10));
+SET i = i + 1;
+END WHILE;
+END $$
+CALL loopInsert() $$
+
+select * from Refund $$
+___________________________________
+
+
+
+
+#Utility
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 20 DO
+Insert into Utility (utility_id,utility_descr)
+VALUES(concat(i),concat('설명',i));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from Utility $$
+_______________________
+
+
+
+
+#DetailedSpaceUtility
+DROP PROCEDURE IF EXISTS loopInsert$$
+CREATE PROCEDURE loopInsert()
+BEGIN 
+
+DECLARE i INT DEFAULT 1;
+WHILE i <= 10 DO
+Insert into DetailedSpaceUtility (utility_id, detailed_id)
+VALUES(concat((rand()+7*i)%15+1),concat((rand()+i)%20+1));
+SET i = i + 1;
+END WHILE;
+
+END $$
+CALL loopInsert() $$
+select * from DetailedSpaceUtility $$
+________________________________________
+

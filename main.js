@@ -1,22 +1,41 @@
-var express    = require('express');
-var mysql      = require('mysql');
-var db 		 = require("./db/mysql.js");
+var express = require('express');
+var mysql = require('mysql');		
+var db = require("./db/mysql.js");
 
 const app = express();
-
 app.set('port', process.env.PORT || 3000);
 
-app.get('/', (req, res) => {
-  res.send('Root');
+app.get('/',(req,res)=>{
+  res.send('spacecloud');
 });
 
-app.get('/users', (req, res) => {
-  db.connection.query('SELECT * from users', (err, results) => {
-    if (err) throw error;
-    console.log('User info is: ', results);
-    res.send(results);
+//main - category, reviews, exhibition
+app.get('/api/main',(req,res)=>{
+  var sql1 = 'SELECT category_name FROM category';
+  var sql2 = 'SELECT r.content, r.rate, r.image, s.space_name, s.tag, d.Price, d.detailed_price_std FROM review r LEFT JOIN space s ON(r.space_id=s.space_id) LEFT JOIN detailedspace d ON(d.space_id=s.space_id) WHERE NOT r.image is NULL';
+  var sql3 = 'SELECT exh_name, exh_description, banner_image FROM exhibition';
+  
+  db.query(sql1, function(err1, category,field1){
+    if (err1) console.log(err1);
+    else {
+      db.query(sql2, (err2, reviews,field2) => {
+        if (err2) console.log(err2);
+        else {
+          db.query(sql3, (err3,exhibition,field3) => {
+            if (err3) console.log(err3);
+            else {res.send({
+              category:category,
+              reviews:reviews,
+              exhibition:exhibition
+              });
+            }
+          });
+        }
+      });
+    }
   });
 });
+
 
 app.listen(app.get('port'), () => {
   console.log('Express server listening on port ' + app.get('port'));

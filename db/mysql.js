@@ -6,7 +6,9 @@ var connection = mysql.createConnection({
     password : 'bomin0217',
     database : 'spacecloud' //데이터베이스 이름
   });
+  
+connection.connect(function(err){
+  if(err) console.log('________________________');
+});
 
-  connection.connect();
-
-  module.exports = connection;
+module.exports = connection;
