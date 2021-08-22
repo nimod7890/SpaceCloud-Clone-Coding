@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('reservation', {
     reserv_no: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -24,11 +25,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'user',
-        key: 'user_id'
-      }
+      allowNull: false
     }
   }, {
     sequelize,
@@ -41,13 +38,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "reserv_no" },
-        ]
-      },
-      {
-        name: "FK_User_TO_Reservation_1",
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
         ]
       },
     ]

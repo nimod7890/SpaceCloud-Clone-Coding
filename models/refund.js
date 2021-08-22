@@ -3,12 +3,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define('refund', {
     space_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'space',
-        key: 'space_id'
-      }
+      allowNull: false
     },
     d_day: {
       type: DataTypes.INTEGER,
@@ -24,16 +19,6 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     sequelize,
     tableName: 'refund',
-    timestamps: false,
-    indexes: [
-      {
-        name: "PRIMARY",
-        unique: true,
-        using: "BTREE",
-        fields: [
-          { name: "space_id" },
-        ]
-      },
-    ]
+    timestamps: false
   });
 };

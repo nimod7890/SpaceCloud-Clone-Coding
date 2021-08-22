@@ -2,12 +2,13 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('review', {
     review_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     content: {
-      type: DataTypes.CHAR(1),
+      type: DataTypes.STRING(50),
       allowNull: true
     },
     date: {
@@ -25,19 +26,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     user_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'user',
-        key: 'user_id'
-      }
+      allowNull: false
     },
     space_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'space',
-        key: 'space_id'
-      }
+      allowNull: false
     }
   }, {
     sequelize,
@@ -50,20 +43,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "review_id" },
-        ]
-      },
-      {
-        name: "FK_User_TO_Review_1",
-        using: "BTREE",
-        fields: [
-          { name: "user_id" },
-        ]
-      },
-      {
-        name: "FK_Space_TO_Review_1",
-        using: "BTREE",
-        fields: [
-          { name: "space_id" },
         ]
       },
     ]

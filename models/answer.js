@@ -2,18 +2,14 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('answer', {
     answer_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
     question_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'question',
-        key: 'question_id'
-      }
+      allowNull: false
     },
     content: {
       type: DataTypes.STRING(500),
@@ -25,11 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     host_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'host',
-        key: 'host_id'
-      }
+      allowNull: false
     }
   }, {
     sequelize,
@@ -42,21 +34,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "answer_id" },
-          { name: "question_id" },
-        ]
-      },
-      {
-        name: "FK_Question_TO_Answer_1",
-        using: "BTREE",
-        fields: [
-          { name: "question_id" },
-        ]
-      },
-      {
-        name: "FK_Host_TO_Answer_1",
-        using: "BTREE",
-        fields: [
-          { name: "host_id" },
         ]
       },
     ]

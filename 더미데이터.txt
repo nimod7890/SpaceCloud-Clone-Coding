@@ -7,6 +7,7 @@ DELIMITER $$
 CREATE PROCEDURE loopInsertUser()
 BEGIN 
 
+
 DECLARE i INT DEFAULT 1;
 WHILE i <= 5 DO
 Insert into User (user_id, nickname, profile_pic, user_email, user_phone, SNS_sync, SNS_register, marketing_aggree, user_pwd)
@@ -18,11 +19,10 @@ END $$
 
 CALL loopInsertUser() $$
 
-_________________________________
 
 
 
-#Help : 카테고리 내맴대로 
+#help
 DROP PROCEDURE IF EXISTS loopInsert $$
 CREATE PROCEDURE loopInsert()
 BEGIN 
@@ -49,8 +49,8 @@ BEGIN
 
 DECLARE i INT DEFAULT 1;
 WHILE i <= 10 DO
-Insert into Space (space_id, space_name, space_description, space_intro, tag,pay_standard,space_image,work_start,work_end,facility_intro,location,notice,host_id,closed_space_id)
-VALUES(concat(i),concat('장소이름',i),concat('장소설명'),concat('한줄설명',i),concat('태그1','태그2','태그3'),concat('NOWPAY'),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'),concat(00),concat(24),concat('이런저런시설설명',i),concat('위치',i),concat('주의사항 어쩌구'),concat(now()%5+1),concat(now()%7+1));
+Insert into Space (space_id, space_name, space_description, space_intro, tag,pay_standard,space_image,work_start,work_end,facility_intro,location,notice,closed_space_id)
+VALUES(concat(i),concat('장소이름',i),concat('장소설명'),concat('한줄설명',i),concat('태그1','태그2','태그3'),concat('NOWPAY'),concat('https://files.startupranking.com/startup/thumb/25562_fd267c8b9658096dc1429e4ad282f83ba7e2d217_spacecloud_m.png'),concat(00),concat(24),concat('이런저런시설설명',i),concat('위치',i),concat('주의사항 어쩌구'),concat(now()%7+1));
 SET i = i + 1;
 END WHILE;
 

@@ -1,0 +1,221 @@
+DROP TABLE IF EXISTS `User`;
+
+CREATE TABLE `User` (
+	`user_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`nickname`	VARCHAR(30)	NOT NULL,
+	`profile_pic`	VARCHAR(255)	NOT NULL,
+	`user_email`	VARCHAR(30)	NOT NULL,
+	`user_phone`	VARCHAR(30)	NULL,
+	`SNS_sync`	VARCHAR(3)	NULL,
+	`SNS_register`	VARCHAR(3)	NOT NULL,
+	`marketing_aggree`	Boolean	NOT NULL,
+	`user_pwd`	VARCHAR(30)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Help`;
+
+CREATE TABLE `Help` (
+	`help_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`title`	VARCHAR(255)	NOT NULL,
+	`category`	VARCHAR(255)	NOT NULL,
+	`description`	VARCHAR(255)	NULL
+);
+
+DROP TABLE IF EXISTS `Space`;
+
+CREATE TABLE `Space` (
+	`space_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`space_name`	VARCHAR(30)	NOT NULL,
+	`space_description`	VARCHAR(30)	NOT NULL,
+	`space_intro`	VARCHAR(30)	NOT NULL,
+	`tag`	VARCHAR(30)	NOT NULL,
+	`pay_standard`	VARCHAR(7)	NOT NULL,
+	`space_image`	VARCHAR(255)	NULL,
+	`work_start`	int	NOT NULL	DEFAULT 00,
+	`work_end`	int	NOT NULL	DEFAULT 24,
+	`facility_intro`	VARCHAR(50)	NOT NULL,
+	`location`	VARCHAR(100)	NOT NULL,
+	`notice`	VARCHAR(255)	NOT NULL,
+	`host_id`	int(5)	NOT NULL,
+	`closed_space_id`	int(10)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Host`;
+
+CREATE TABLE `Host` (
+	`host_id`	int(5)	NOT NULL	AUTO_INCREMENT primary key,
+	`host_description`	VARCHAR(100)	NULL,
+	`host_image`	VARCHAR(255)	NULL
+);
+
+DROP TABLE IF EXISTS `Exhibition`;
+
+CREATE TABLE `Exhibition` (
+	`exh_id`	int(4)	NOT NULL	AUTO_INCREMENT primary key,
+	`exh_name`	VARCHAR(30)	NOT NULL,
+	`exh_description`	VARCHAR(100)	NOT NULL,
+	`banner_image`	VARCHAR(255)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `exhibitionSpace`;
+
+CREATE TABLE `exhibitionSpace` (
+	`exh_space_id`	int(5)	NOT NULL,
+	`exh_id`	int(4)	NOT NULL,
+	`space_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Category`;
+
+CREATE TABLE `Category` (
+	`category_id`	int(2)	NOT NULL	AUTO_INCREMENT primary key,
+	`category_name`	char(5)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Zzim`;
+
+CREATE TABLE `Zzim` (
+	`space_id`	int	NOT NULL,
+	`user_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `categorySpace`;
+
+CREATE TABLE `categorySpace` (
+	`category_space_id`	VARCHAR(255)	NOT NULL,
+	`category_id`	int(2)	NOT NULL,
+	`space_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Question`;
+
+CREATE TABLE `Question` (
+	`question_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`content`	VARCHAR(255)	NOT NULL,
+	`date`	VARCHAR(30)	NOT NULL,
+	`user_id`	int	NOT NULL,
+	`space_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Answer`;
+
+CREATE TABLE `Answer` (
+	`answer_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`question_id`	int	NOT NULL,
+	`content`	VARCHAR(500)	NOT NULL,
+	`date`	VARCHAR(30)	NOT NULL,
+	`host_id`	int(5)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Review`;
+
+CREATE TABLE `Review` (
+	`review_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`content`	VARCHAR(50)	NULL,
+	`date`	VARCHAR(30)	NOT NULL,
+	`rate`	int	NOT NULL	DEFAULT 5,
+	`image`	VARCHAR(255)	NULL,
+	`user_id`	int	NOT NULL,
+	`space_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `ClosedDay`;
+
+CREATE TABLE `ClosedDay` (
+	`closedDay_id`	int(1)	NOT NULL	AUTO_INCREMENT primary key,
+	`closedDay`	VARCHAR(5)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `closedDaySpace`;
+
+CREATE TABLE `closedDaySpace` (
+	`closed_space_id`	int(10)	NOT NULL,
+	`closedDay_id`	int(1)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Notice`;
+
+CREATE TABLE `Notice` (
+	`notice_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`name`	VARCHAR(100)	NOT NULL,
+	`content`	VARCHAR(255)	NULL
+);
+
+DROP TABLE IF EXISTS `Reservation`;
+
+CREATE TABLE `Reservation` (
+	`reserv_no`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`ap_date`	VARCHAR(30)	NOT NULL,
+	`booker_name`	VARCHAR(10)	NOT NULL,
+	`date`	VARCHAR(30)	NOT NULL,
+	`requests`	VARCHAR(200)	NULL,
+	`user_id`	int	NOT NULL
+);
+
+DROP TABLE IF EXISTS `AllocatedCoupon`;
+
+CREATE TABLE `AllocatedCoupon` (
+	`alloc_coupon_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`coupon_id`	int	NOT NULL,
+	`user_id`	int	NOT NULL,
+	`regi_date`	VARCHAR(30)	NOT NULL,
+	`dd_date`	VARCHAR(30)	NULL,
+	`use_period`	VARCHAR(60)	NULL,
+	`Field`	VARCHAR(255)	NULL
+);
+
+DROP TABLE IF EXISTS `DetailedSpace`;
+
+CREATE TABLE `DetailedSpace` (
+	`detailed_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`detailedDescription`	VARCHAR(100)	NOT NULL,
+	`Price`	int	NOT NULL,
+	`accommodation`	VARCHAR(30)	NULL,
+	`detailed_price_std`	int	NOT NULL	COMMENT 'detailed_price_standard를 의미',
+	`additional_reserv_option`	VARCHAR(30)	NOT NULL,
+	`space_id`	int	NOT NULL,
+	`reserv_no`	int	NOT NULL	COMMENT '예약 번호'
+);
+
+DROP TABLE IF EXISTS `Coupon`;
+
+CREATE TABLE `Coupon` (
+	`coupon_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`coupon_name`	VARCHAR(50)	NOT NULL,
+	`effect`	Boolean	NOT NULL,
+	`discount_rate`	int(3)	NULL,
+	`discount_amount`	int(10)	NULL,
+	`description`	VARCHAR(100)	NOT NULL,
+	`coupon_condition`	VARCHAR(255)	NULL
+);
+
+DROP TABLE IF EXISTS `Reply`;
+
+CREATE TABLE `Reply` (
+	`reply_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`review_id`	int	NOT NULL,
+	`content`	VARCHAR(255)	NULL,
+	`date`	VARCHAR(30)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `Refund`;
+
+CREATE TABLE `Refund` (
+	`space_id`	int	NOT NULL,
+	`d_day`	int(1)	NOT NULL	COMMENT '이용 n일 전',
+	`percent`	int(3)	NOT NULL	DEFAULT 100	COMMENT '몇 퍼센트 환불할지'
+);
+
+DROP TABLE IF EXISTS `Utility`;
+
+CREATE TABLE `Utility` (
+	`utility_id`	int	NOT NULL	AUTO_INCREMENT primary key,
+	`utility_descr`	VARCHAR(255)	NOT NULL
+);
+
+DROP TABLE IF EXISTS `DetailedSpaceUtility`;
+
+CREATE TABLE `DetailedSpaceUtility` (
+	`detailed_id`	int	NOT NULL,
+	`utility_id`	int	NOT NULL	COMMENT '편의시설 id (COOK)'
+);

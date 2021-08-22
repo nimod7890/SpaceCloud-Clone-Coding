@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('detailedspace', {
     detailed_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -29,20 +30,12 @@ module.exports = function(sequelize, DataTypes) {
     },
     space_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'space',
-        key: 'space_id'
-      }
+      allowNull: false
     },
     reserv_no: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "예약 번호",
-      references: {
-        model: 'reservation',
-        key: 'reserv_no'
-      }
+      comment: "예약 번호"
     }
   }, {
     sequelize,
@@ -55,20 +48,6 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "detailed_id" },
-        ]
-      },
-      {
-        name: "FK_Space_TO_DetailedSpace_1",
-        using: "BTREE",
-        fields: [
-          { name: "space_id" },
-        ]
-      },
-      {
-        name: "FK_Reservation_TO_DetailedSpace_1",
-        using: "BTREE",
-        fields: [
-          { name: "reserv_no" },
         ]
       },
     ]
