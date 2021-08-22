@@ -1,6 +1,8 @@
 var express = require('express');
 var mysql = require('mysql');		
 var db = require("./db/mysql.js");
+var sequelize = require('./models').sequelize;   // mysql 시퀄라이저 모델
+sequelize.sync();    //서버가 실행될때 시퀄라이저의 스키마를 DB에 적용시킨다.
 
 const app = express();
 app.set('port', process.env.PORT || 3000);
@@ -10,7 +12,7 @@ app.get('/',(req,res)=>{
 });
 
 //main - category, reviews, exhibition
-app.get('/api/main',(req,res)=>{
+app.get('/main',(req,res)=>{
   var sql1 = 'SELECT category_name FROM category';
   var sql2 = 'SELECT r.content, r.rate, r.image, s.space_name, s.tag, d.Price, d.detailed_price_std FROM review r LEFT JOIN space s ON(r.space_id=s.space_id) LEFT JOIN detailedspace d ON(d.space_id=s.space_id) WHERE NOT r.image is NULL';
   var sql3 = 'SELECT exh_name, exh_description, banner_image FROM exhibition';
@@ -35,6 +37,9 @@ app.get('/api/main',(req,res)=>{
     }
   });
 });
+
+
+
 
 
 app.listen(app.get('port'), () => {
