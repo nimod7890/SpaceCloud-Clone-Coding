@@ -1,11 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require('../../models').user;
-var session = require('express-session')
-var MySQLStore = require('session-file-store')(session)
 
 router.get('/',function(req,res,next){
-  var sess=req.session;
   res.send("userPage");
 });
 
@@ -27,12 +24,15 @@ router.post('/login',function(req,res,next){
         var data={success:false,msg:msgg};
         res.send(data);
       }else{
+        req.session.authenticate = true;
         var msgg="login success\nEmail:"+reqEmail+"\nPwd:"+reqPwd;
         var sess=req.session;
         sess.user_email=reqEmail;
         sess.username=data.username;
-        console.log('set session : '+sess);
-        res.send(data);
+        console.log('set session email : '+sess.user_email+'\nusername'+sess.username);
+        req.session.save(function(){
+          res.redirect('/');
+        })
       }
     })
   .catch(function(err){
@@ -43,7 +43,8 @@ router.post('/login',function(req,res,next){
 })
 
 router.get('/logout',function(req,res,next){
-  delete req.session;
+  delete req.session.user_email;
+  delete req.session.username;
   res.send('logout');
 })
 
@@ -75,10 +76,10 @@ router.post('/signup',async(req, res, next) =>{
         marketing_aggree:false,
         SNS_register:'NVR'
       });
-      res.send(User,{nickname:nickName,usre_email:email,user_pwd:password});
+      res.send({nickname:nickName,usre_email:email,user_pwd:password});
     }else {
       console.log("뭘까");
-      res.send('뭐지모를 err 방지')
+      res.send('뭐지모를 err 방지용')
     }
   }catch(err){    
     var msg='____________________________\nsignup failed\n'+err;

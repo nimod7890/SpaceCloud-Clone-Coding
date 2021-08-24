@@ -3,8 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mysql = require("mysql");
 var session = require('express-session')
-var MySQLStore = require('session-file-store')(session)
+var MySQLStore = require('express-mysql-session')(session)
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -12,21 +13,20 @@ var homeRouter = require('./routes/home');
 
 var app = express()
 
-
 var options={
     host:'localhost',
-    port:'3000',
     user:'root',
     password:'bomin0217',
     database:'clonecoding'
 }
-app.use(cookieParser());
+var connection = mysql.createConnection(options);
+var sessionStore = new MySQLStore({}, connection);
 app.use(session({
     key:'cookie',
     secret: 'asadlfkj!@#!@#dfgasdg',
     resave: false,
-    saveUninitialized: true,
-    store:new MySQLStore(options)
+    saveUninitialized: false,
+    store:sessionStore
 }));
 
 app.set('views', path.join(__dirname, './views'));
@@ -58,5 +58,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
