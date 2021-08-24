@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'SpaceCloud' });
+  if (!req.session) return res.render("users");
+  if(req.session.authenticate){
+    return res.render("home")
+  }
 });
 
 module.exports = router;
