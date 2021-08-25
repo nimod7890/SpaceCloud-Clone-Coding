@@ -9,26 +9,24 @@ module.exports = function (passport){
   });
 
   router.get('/login',function(req,res,next){
-    req.user.then(function(result){
-      console.log(result)
-    })
+    console.log(req.user);
     res.send('loginPage');
   });
   
   router.post('/login',
     passport.authenticate('local', {
       successRedirect: '/home',
-      failureRedirect: '/login'
+      failureRedirect: '/users/login'
   }));
 
-  router.get("/kakao", passport.authenticate("kakao"));
+  router.get("/kakao", passport.authenticate('kakao'));
 
 
-  router.get("/oauth/kakao/callback",
-    passport.authenticate("kakao", {
-      successRedirect: '/home',
-      failureRedirect: '/login'
-  }));
+  router.get("/Api/Member/Oauth2ClientCallback/kakao",
+    passport.authenticate('kakao', {
+      failureRedirect: '/users/login',
+      successRedirect: '/home'
+    }));
   
   router.get('/logout',function(req,res,next){
     req.logout();
