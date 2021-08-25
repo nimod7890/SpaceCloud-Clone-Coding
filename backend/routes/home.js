@@ -7,6 +7,7 @@ var exhibitionModel = require('../../models').exhibition;
 
 //main - category, reviews, exhibition
 router.get('/', async(req, res, next) =>{
+    console.log("home");
     try{
         const category = await categoryModel.findAll({});
         const review = await reviewModel.findAll({});

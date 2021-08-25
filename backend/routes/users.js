@@ -2,12 +2,12 @@ var express = require('express');
 var router = express.Router();
 var userModel = require('../../models').user;
 
-
 module.exports = function (passport){
   router.get('/',function(req,res,next){
+    console.log("userPage");
     res.send("userPage");
   });
-  
+
   router.get('/login',function(req,res,next){
     req.user.then(function(result){
       console.log(result)
@@ -17,8 +17,17 @@ module.exports = function (passport){
   
   router.post('/login',
     passport.authenticate('local', {
-      successRedirect: '/',
-      failureRedirect: '/auth/login'
+      successRedirect: '/home',
+      failureRedirect: '/login'
+  }));
+
+  router.get("/kakao", passport.authenticate("kakao"));
+
+
+  router.get("/oauth/kakao/callback",
+    passport.authenticate("kakao", {
+      successRedirect: '/home',
+      failureRedirect: '/login'
   }));
   
   router.get('/logout',function(req,res,next){
@@ -35,7 +44,6 @@ module.exports = function (passport){
   });
   
   router.post('/signup',async(req, res, next) =>{
-    
     const { email, nickName, password} = req.body;
     if (! email || ! password || ! nickName) {
       var msg='signup failed:empty value(s)' 
